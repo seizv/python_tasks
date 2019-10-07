@@ -96,49 +96,6 @@ class EquilateralTriangle(IsoscelesTriangle):
     def __init__(self, *args):
         super().__init__(*args)
         self.b = self.a
-
-'''
-Exercise 2 (done)
-реализуйте класс "BrokenCalc", у которого неправильно работают все функции
-пример вызова: brocen_calc_instance.function(arg1, arg2)
-перечень неисправностей:
-сложение - возвращает разность
-вычитание - сумму
-деление - возвращает первое число в степени второго
-умножение двух чисел - строку, скомпонованную из них
-возведение числа в степень должно поменять местами число и степень, 
-и вернуть вычисленный результат("2 в степени 3" должно вернуть "3 в степени 2" = 9)
-корень из числа всегда возвращает ноль
-
-звёздочка*: реализации методов сложения, вычитания, умножения должны уметь работать с любым количеством входных аргументов:
-
->>> brocen_calc_instance.add(2, 3, 4, 5, 6) # 2 - 3 - 4 - 5 - 6
-<<< -16
-'''
-class BrokenCalc:
-    def add(*args):
-        result = args[0]
-        for value in args[1:]:
-            result -= value
-        return result
-
-    def sub(*args):
-        unsub = -sum(args[1:])
-        return BrokenCalc.add(args[0], unsub)
-
-    def truediv(*args):
-        return args[0] ** args[1]
-
-    def mul(*args):
-        return ''.join(map(str, args))
-
-
-    def pow(*args):
-        return args[1] ** args[0]
-
-    def sqrt(*args):
-        return 0
-
 '''
 R = Rectangle(1, 2)
 R.area()
@@ -161,15 +118,58 @@ Iso.perimeter()
 Eqt = EquilateralTriangle(2)
 Eqt.area()
 Eqt.perimeter()
-
-brocen_calc_instance = BrokenCalc
-print(brocen_calc_instance.add(2, 3, 4, 5, 6))
-print(brocen_calc_instance.sub(1, 2, 3, 4))
-print(brocen_calc_instance.truediv(1, 2))
-print(brocen_calc_instance.mul(1, 344, 4, 5, 33))
-print(brocen_calc_instance.pow(2, 3))
-print(brocen_calc_instance.sqrt(22))
 '''
+'''
+Exercise 2 (done)
+реализуйте класс "BrokenCalc", у которого неправильно работают все функции
+пример вызова: brocen_calc_instance.function(arg1, arg2)
+перечень неисправностей:
+сложение - возвращает разность
+вычитание - сумму
+деление - возвращает первое число в степени второго
+умножение двух чисел - строку, скомпонованную из них
+возведение числа в степень должно поменять местами число и степень, 
+и вернуть вычисленный результат("2 в степени 3" должно вернуть "3 в степени 2" = 9)
+корень из числа всегда возвращает ноль
+
+звёздочка*: реализации методов сложения, вычитания, умножения должны уметь работать с любым количеством входных аргументов:
+
+>>> brocen_calc_instance.add(2, 3, 4, 5, 6) # 2 - 3 - 4 - 5 - 6
+<<< -16
+'''
+class BrokenCalc:
+    def __init__(self, *args):
+        self.args = args
+
+    def add(self):
+        result = self.args[0]
+        for value in self.args[1:]:
+            result -= value
+        return result
+
+    def sub(self):
+        return self.args[0] + sum(self.args[1:])
+
+    def truediv(self):
+        return self.args[0] ** self.args[1]
+
+    def mul(self):
+        return ''.join(map(str, self.args))
+
+    def pow(self):
+        return self.args[1] ** self.args[0]
+
+    def sqrt(self):
+        return 0
+
+brocen_calc_instance = BrokenCalc(2, 3, 4, 5, 6)
+print(brocen_calc_instance.add())
+print(brocen_calc_instance.sub())
+print(brocen_calc_instance.truediv())
+print(brocen_calc_instance.mul())
+print(brocen_calc_instance.pow())
+print(brocen_calc_instance.sqrt())
+
 
 '''
 Exercise 3 (in progress)
@@ -210,7 +210,7 @@ def print_tree(node, file=None, _prefix="", _last=True):
         _last = i == (child_count - 1)
         print_tree(child, file, _prefix, _last)
 
-print_tree(root)
+#print_tree(root)
 '''
 Exercise 4 (failed)
 Логирование. Необходимо реализовать логирование при помощи классов. Класс логирования должен обеспечивать возможность 
@@ -249,6 +249,8 @@ class Elevator:
     floor = 1
     weight = 2
     max_weight = 200
+    def __str__(self):
+        return "Этаж: {} Загруженность: {}".format(self.floor, self.weight)
 
     def move(self, n):
         '''
@@ -267,21 +269,16 @@ class Elevator:
             else:
                 break
 
-
     def floor_now(self):
         time.sleep(1)
         print("Этаж: {}".format(self.floor))
 
-    def print(self):
-        print("Этаж: {} Загруженность: {}".format(self.floor, self.weight))
-
 user = Elevator()
 user.weight = 101
+print(user)
 user.move(13)
-user.print()
+print(user)
 user.move(-14)
-user.print()
 user.move(15)
 user.weight = 1001
 user.move(-2)
-
