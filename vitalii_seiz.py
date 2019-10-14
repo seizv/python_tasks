@@ -44,7 +44,7 @@ class RestAnswers(object):
     def show_warnings(self):
         api = GuiApi(self.ip, logger=logger, formt='json')
         api.Login.login(usr_email='admin@tycomonitor.com', usr_password='Admin123')
-        while not self.panel_is_activated():
+        while not self.panel_is_discovered():
             time.sleep(5)
         unt_id = api.Units.getUnitId(self.serial)
         response_list = api.Diagnostic.getDevices(unitId=unt_id)
@@ -61,7 +61,7 @@ class RestAnswers(object):
             print("{}, {}".format(key, value))
         '''
 
-    def panel_is_activated(self):
+    def panel_is_discovered(self):
         api = GuiApi(self.ip, logger=logger, formt='json')
         api.Login.login(usr_email='admin@tycomonitor.com', usr_password='Admin123')
         unt_id = api.Units.getUnitId(self.serial)
@@ -70,7 +70,7 @@ class RestAnswers(object):
             for i in response_list:
                 if i['warnings'] is not None:
                     for list_i in i['warnings']:
-                        if ['device_type'] == 'CONTROL_PANEL' and list_i['type'] == 'NOT_DISCOVERED':
+                        if list_i['type'] == 'NOT_DISCOVERED':
                             return False
             return True
 
