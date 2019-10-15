@@ -12,12 +12,6 @@ class SimpleEmu(object):
 
     def new_neo_panel(self, account='1234567890'):
         self.account = account
-        '''
-        formatter = logging.Formatter('%(asctime)s::: %(message)s')
-        streamHandler = logging.StreamHandler()
-        streamHandler.setFormatter(formatter)
-        logger.addHandler(streamHandler)
-        '''
         self.panel = NeoPanel(serial=self.serial, account=self.account, media='IP', model='HS3128', logger=logger)
         self.panel.config.host = self.ip
 
@@ -32,8 +26,6 @@ class SimpleEmu(object):
 
     def start_process(self):
         self.panel.connectITv2()
-        self.panel.stopITv2Session()
-        self.panel.config.VK.active = False
 
 
 class RestAnswers(object):
@@ -48,8 +40,6 @@ class RestAnswers(object):
             time.sleep(5)
         unt_id = api.Units.getUnitId(self.serial)
         response_list = api.Diagnostic.getDevices(unitId=unt_id)
-        #response = api.Unit.info(unt_id=unt_id)
-        #response_info = api.Units.getPanelInfo(response=response)
         for i in response_list:
             if i['warnings'] is not None:
                 for list_i in i['warnings']:
@@ -91,10 +81,4 @@ if __name__ == '__main__':
     my_thread.start()
     my_thread = threading.Thread(target=answers.show_warnings)
     my_thread.start()
-
-
-
-
-
-
-
+    
